@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Inter var';
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+  font-named-instance: 'Regular';
+  src: url("./fonts/Inter-roman.var.woff2?v=3.18") format("woff2");
+}
+@font-face {
+  font-family: 'Inter var';
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: italic;
+  font-named-instance: 'Italic';
+  src: url("./fonts/Inter-italic.var.woff2?v=3.18") format("woff2");
+}
+
+body {
+  font-size: 100%;
+}
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}

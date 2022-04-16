@@ -1,0 +1,78 @@
+{
+  "manifest_version": 2,
+  "name": "Alby - Bitcoin Lightning Wallet",
+  "version": "0.0.0",
+
+  "icons": {
+    "16": "assets/icons/alby_icon_yellow_16x16.png",
+    "32": "assets/icons/alby_icon_yellow_32x32.png",
+    "48": "assets/icons/alby_icon_yellow_48x48.png",
+    "128": "assets/icons/alby_icon_yellow_128x128.png"
+  },
+  "description": "The Bitcoin Lightning wallet for direct payments across the globe, Bitcoin Lightning applications and passwordless logins.",
+  "homepage_url": "https://getAlby.com/",
+  "web_accessible_resources": ["js/inpageScript.bundle.js"],
+  "permissions": [
+    "notifications",
+    "activeTab",
+    "tabs",
+    "storage",
+    "unlimitedStorage",
+    "nativeMessaging",
+    "*://*/*"
+  ],
+
+  "content_security_policy": "script-src 'self'; object-src 'self'",
+
+  "__chrome|firefox__author": "Alby",
+  "__opera__developer": {
+    "name": "Alby"
+  },
+
+  "__firefox__browser_specific_settings": {
+    "gecko": {
+      "id": "extension@getalby.com"
+    }
+  },
+
+  "__chrome__minimum_chrome_version": "49",
+  "__opera__minimum_opera_version": "36",
+
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "assets/icons/alby_icon_sleeping_16x16.png",
+      "32": "assets/icons/alby_icon_sleeping_32x32.png",
+      "48": "assets/icons/alby_icon_sleeping_48x48.png",
+      "128": "assets/icons/alby_icon_sleeping_128x128.png"
+    },
+    "default_title": "Alby - Bitcoin Lightning Wallet",
+    "__chrome|opera__chrome_style": false,
+    "__firefox__browser_style": false
+  },
+
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true,
+    "__chrome|opera__chrome_style": false,
+    "__firefox__browser_style": false
+  },
+
+  "background": {
+    "scripts": [
+      "js/background.bundle.js"
+    ],
+    "__chrome|opera__persistent": true
+  },
+
+  "content_scripts": [{
+    "all_frames": true,
+    "matches": [
+      "*://*/*"
+    ],
+    "run_at": "document_end",
+    "js": [
+      "js/contentScript.bundle.js"
+    ]
+  }]
+}
