@@ -18,7 +18,10 @@ const routes = {
   ln: ln,
   accounts: accounts,
   */
+
   addAllowance: allowances.add,
+
+  // this helps in enabling the webln , so every webln shall have its route or port through which it triggers the browser
   enable: allowances.enable,
   getAllowance: allowances.get,
   getAllowanceById: allowances.getById,

@@ -36,6 +36,9 @@ const Dd = ({ children }: { children: React.ReactNode }) => (
   <dd className="mb-4 dark:text-white">{children}</dd>
 );
 
+// screen is loaded when payment is done via lnurl
+// both screens for webln payment and lnurl payment are different
+
 function LNURLPay(props: Props) {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -177,7 +180,18 @@ function LNURLPay(props: Props) {
   function getRecipient() {
     if (!details?.metadata) return;
     try {
+     //details is the object which contains all the information about the object
+     // metadata field of that object is parsed using json.parse
+     //details.metadata give array of array assigned to the metadata field i.e [[]]
+    // after json.parse that is converted into an array data structure
+
+    // but parsing is required only for specific purpose like here to get receipient
       const metadata = JSON.parse(details.metadata);
+      
+//console.log(metadata);
+     
+    //  console.log(details);
+
       const identifier = metadata.find(
         ([type]: [string]) => type === "text/identifier"
       );
@@ -188,11 +202,18 @@ function LNURLPay(props: Props) {
     return details.domain;
   }
 
+
+  // this function is called to parese the metadata to convert it into array
+  // this function only extracts description and full description if present and returns it in metadata const
+  // so like this we can parse received json array using json.parse and convert it into normal array, and then create a new function to extract values from that array
   function formattedMetadata(
     metadataJSON: string
   ): [string, string | React.ReactNode][] {
     try {
+      // here we are already parsing the metadata so no need to pass parsed metadata directly pass json array
       const metadata = JSON.parse(metadataJSON);
+     // console.log(metadata);
+
       return metadata
         .map(([type, content]: [string, string]) => {
           if (type === "text/plain") {
@@ -282,6 +303,7 @@ function LNURLPay(props: Props) {
                   <>
                     <Dt>Send payment to</Dt>
                     <Dd>{getRecipient()}</Dd>
+                    {/* function is used on details.metadata which is json array, that json arrary is passed to this function it functions processes it and returns the valid json file */}
                     {formattedMetadata(details.metadata).map(([dt, dd]) => (
                       <>
                         <Dt>{dt}</Dt>

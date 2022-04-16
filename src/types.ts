@@ -157,6 +157,7 @@ export type Transaction = {
   totalAmount: string;
   description: string;
   location: string;
+  metadata: string;
 };
 
 export interface Allowance {

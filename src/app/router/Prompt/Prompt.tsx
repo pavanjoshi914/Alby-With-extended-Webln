@@ -26,6 +26,7 @@ class Prompt extends Component<
     super(props);
     const message = qs.parse(window.location.search);
     let origin = {} as OriginData;
+    // metadata and paymentRequest lnbc string passed via SendPayment is stored in args object
     let args = {};
     let type = "";
     if (message.origin && typeof message.origin === "string") {
@@ -98,6 +99,9 @@ class Prompt extends Component<
                   <ConfirmPayment
                     paymentRequest={this.state.args?.paymentRequest as string}
                     origin={this.state.origin}
+                    // arguments of the states contain paymentRequest and metadata paramter
+                  
+                    metadata ={this.state.args?.metadata as string}
                   />
                 }
               />

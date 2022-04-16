@@ -10,9 +10,12 @@ import { Transaction } from "../../../types";
 import Badge from "../Badge";
 
 type Props = {
+  // varible transactions hold the list of the type Transaction
   transactions: Transaction[];
 };
 
+
+// loads transactions done to the given websites
 export default function TransactionsTable({ transactions }: Props) {
   function renderIcon(type: string) {
     function getIcon() {
@@ -33,6 +36,8 @@ export default function TransactionsTable({ transactions }: Props) {
     );
   }
 
+// transactions contains all the transactions present in array of type Transaction i.e Transaction[]
+  console.log(transactions);
   return (
     <div className="shadow overflow-hidden rounded-lg">
       <div className="bg-white divide-y divide-gray-200 dark:bg-gray-700">
@@ -85,6 +90,7 @@ export default function TransactionsTable({ transactions }: Props) {
                   <Disclosure.Panel>
                     <div className="mt-1 ml-9 text-xs text-gray-500 dark:text-gray-400">
                       {tx.description}
+                      
                       {tx.preimage && (
                         <p className="truncate">Preimage: {tx.preimage}</p>
                       )}
@@ -94,6 +100,10 @@ export default function TransactionsTable({ transactions }: Props) {
                         </a>
                       ) : (
                         ""
+                      )}
+
+                      { (
+                        <p className="truncate">Metadata: {tx.metadata}</p>
                       )}
                     </div>
                   </Disclosure.Panel>

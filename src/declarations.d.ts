@@ -1,4 +1,5 @@
 interface PaymentRequestDetails {
+  metadata: string;
   chain_address?: string;
   cltv_delta: number;
   created_at: string;

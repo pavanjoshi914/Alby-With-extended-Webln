@@ -16,19 +16,52 @@ import TextField from "../../components/Form/TextField";
 export type Props = {
   origin?: OriginData;
   paymentRequest?: string;
+  metadata?: string;
 };
 
+// props contains one object which contains another two objects origin and paymentRequest. paymentRequest holds lnbc bolt 11 invoice
+// and origin holds site name, image, description etc 
+// we have already passed an metadata through the SendPayment function of the weblnprovider
+// so we need to add metadata in the props of the confirmPayment to render it
+
+//this prompt is shown only for webln based thing
+// when payment is done via lnurl qrcode we get prompt rendered present in screens/LNURLPay.tsx
+// so currently we are adding metadata only for webln and not for any other thing
 function ConfirmPayment(props: Props) {
+  console.log(props);
+
+  // converting props.metadata which holds json array into simple array
+  // no need for this , just pass props.details json array as it is and then run formattedMetadata function on that array. 
+  const metadata = JSON.parse(props.metadata!);
+
+    // this function is called to parese the metadata to convert it into array
+  // this function only extracts description and full description if present and returns it in metadata const
+  // so like this we can parse received json array using json.parse and convert it into normal array, and then create a new function to extract values from that array
+  
+
+  console.log(metadata);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const auth = useAuth();
+  // holds all the data related to invoice
+  // props.paymentRequest holds the original lnurl.
+
+  console.log(props.paymentRequest);
   const invoiceRef = useRef(
     parsePaymentRequest({
       request:
         props.paymentRequest || (searchParams.get("paymentRequest") as string),
     })
   );
+  //console.log(invoiceRef);
+  
+  // holds all the metadata related to site, name of site, icon of site etc
   const originRef = useRef(props.origin || getOriginData());
+  // holds origin metadata as well as metadata passed via the webln
+  console.log(originRef.current);
+
+  const metadataRef = useRef(props.metadata)
+
   const paymentRequestRef = useRef(
     props.paymentRequest || searchParams.get("paymentRequest")
   );
@@ -49,8 +82,11 @@ function ConfirmPayment(props: Props) {
       const response = await utils.call(
         "sendPayment",
         { paymentRequest: paymentRequestRef.current },
-        { origin: originRef.current }
+        // adding metadata in the object which hold sites metadata as well
+        { origin: originRef.current, metadata: metadataRef.current }
+        
       );
+     
       auth.fetchAccountInfo(); // Update balance.
       msg.reply(response);
       setSuccessMessage("Success, payment sent!");
@@ -102,6 +138,7 @@ function ConfirmPayment(props: Props) {
 
   return (
     <div>
+      {/* stores the webln enables sites name and icon and displays it in the confirm payment dialog */}
       <PublisherCard
         title={originRef.current.name}
         image={originRef.current.icon}
@@ -111,9 +148,21 @@ function ConfirmPayment(props: Props) {
         {!succesMessage ? (
           <>
             <div className="mb-8">
+              {/* shows payment summary i.e amount , description and we need to port metadata correctly here */}
+              {/* invoiceRef holds bolt 11 invoice, now a days they added new specification guidelines that invoice can contain metadata but no implementation is done in alby i thing to decode metadata from lnbc url 
+              https://github.com/lightning/bolts/commit/2ab3a9f0221e601ba58ebb8bcaee55158b21bf80#diff-df5015da6e7bca53db91a45f0908a887b34664093f949400f01148e83ba75b93R713
+              so we have to see metadata passed from webln as a side data shall be included in invoice or not.
+              i think no. cause lnbc invoice is already send through SendPayment and on side we are sending payment metadata so i think they are not considering to include metadata in invoice
+              
+              */}
               <PaymentSummary
                 amount={invoiceRef.current?.tokens}
                 description={invoiceRef.current?.description}
+                // we are passing json array directly and then formatting it using GetFormattedJson function  in the PaymentSummary component and rendering it.
+                
+
+      
+                metadata={props.metadata}
               />
             </div>
 
